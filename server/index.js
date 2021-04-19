@@ -13,9 +13,11 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors());
 
- //TODO: change mongodb host
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true})
-    .then(() => console.log("DB start"))
+const CONNECTION_URL = "mongodb://localhost"
+const PORT = process.env.PORT || 27017;
+
+mongoose.connect(CONNECTION_URL, {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => app.listen(PORT, () => console.log("DB start")))
     .catch((error) => console.log(error.message));
 
 mongoose.set("useFindAndModify", false)
