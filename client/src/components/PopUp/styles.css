@@ -1,0 +1,31 @@
+.popup{
+    position: relative;
+    top: 50px;
+    width: 100%;
+    height: 100vh;
+    background-color:#C8C8C8;
+    border-radius: 20px;
+    display: flex;
+    text-align: justify;
+    line-height: 200%;
+    
+}
+
+.popup .close-btn{
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    height:20px;
+    border-radius: 10px;
+}
+
+.popup .popup-inner{
+    position: relative;
+    margin: 20px;
+    margin-top: 50px;
+    height: 100hv;
+    width: 95%;
+    padding:3px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
