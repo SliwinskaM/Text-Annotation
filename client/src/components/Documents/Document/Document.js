@@ -15,6 +15,7 @@ const Document = ({ document }) => {
 
 
   const changeTrigger = (e) => {
+    localStorage.setItem('currentPostId', document._id);
     if (res[0].split('/')[1].split(';')[0] == "pdf") {
 
       localStorage.setItem('trigger', true);
