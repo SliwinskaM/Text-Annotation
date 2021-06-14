@@ -34,18 +34,11 @@ function selectionPosition() {
     if (typeof window.getSelection != 'undefined') {
         var sel = window.getSelection();
         var range = sel.getRangeAt(0);
-
-        var wholeText = range.startContainer.innerText;
-
         var endOffset = getCaretIndex(window.document.getElementsByClassName("popup-inner")[0]);
         var startOffset = endOffset - range.toString().length;
-        console.log("Oryginał: " + wholeText.slice(startOffset, endOffset));
-
-        console.log("Selection starts at: " + startOffset);
-        console.log("Selection ends at: " + endOffset);
         return [startOffset, endOffset]
     }
-}
+  }
 
 
 function getCaretIndex(element) {
@@ -64,6 +57,28 @@ function getCaretIndex(element) {
   return position;
 }
 
+function correctSelection() {
+  var sel = window.getSelection();
+  var range = sel.getRangeAt(0);
+  var div = window.document.getElementsByClassName("popup-inner")[0];
+  var wholeText = div.innerText;
+  var startOffset = selectionPosition()[0];
+  var endOffset = selectionPosition()[1];
+
+  for (var i=0; i < 30; i++) {
+    if (startOffset - 1 >= 0 && wholeText.charAt(startOffset - 1) !== " ") {
+      range.setStart(range.startContainer, range.startOffset - 1);
+      startOffset -= 1;
+    }
+}
+for (var i=0; i < 30; i++) {
+  if (endOffset + 1 <= wholeText.length && wholeText.charAt(endOffset) !== " ") {
+    range.setEnd(range.endContainer, range.endOffset + 1);
+    endOffset += 1;
+  }
+}
+  
+}
 
 
 
@@ -76,7 +91,7 @@ function submitSelectionLabel(label_name) {
     var l_position = [];
     var u = '';
     var u_position = []
-    var labelWords = selectionString().split(' ');
+    var labelWords = selectionString().split(" ");
     if (labelWords.length == 1) {
         u = labelWords[0];
         u_position = selectionPosition();
@@ -155,6 +170,7 @@ function clearTables(word) {
 }
 
 export function function1() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -189,6 +205,7 @@ export function function1() {
 }
 
 export function function2() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -221,6 +238,7 @@ export function function2() {
     }
 }
 export function function3() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -254,6 +272,7 @@ export function function3() {
 
 }
 export function function4() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -287,6 +306,7 @@ export function function4() {
 }
 
 export function function5() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -297,7 +317,7 @@ export function function5() {
                 clearTables(word);
                 label5.push(word);
                 element.className = "norp";
-                element.style.cssText = 'color: white; background-color: green';
+                element.style.cssText = 'font-weight: bold; color: white; background-color: green';
                 submitSelectionLabel(label5_name);
             } else {
                 label5 = label5.filter(item => item !== word);
@@ -312,7 +332,7 @@ export function function5() {
             mytext.className = "norp";
             var w = getSelection().getRangeAt(0);
             w.surroundContents(mytext);
-            mytext.style.cssText = 'color: white; background-color: green';
+            mytext.style.cssText = 'font-weight: bold; color: white; background-color: green';
             submitSelectionLabel(label5_name);
 
         }
@@ -320,6 +340,7 @@ export function function5() {
 
 }
 export function function6() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
@@ -330,7 +351,7 @@ export function function6() {
                 clearTables(word);
                 label6.push(word);
                 element.className = "label6";
-                element.style.cssText = 'color: white; background-color: blue';
+                element.style.cssText = 'font-weight: bold; color: white; background-color: blue';
                 submitSelectionLabel(label6_name);
             } else {
                 label6 = label6.filter(item => item !== word);
@@ -345,7 +366,7 @@ export function function6() {
             mytext.className = "label6";
             var w = getSelection().getRangeAt(0);
             w.surroundContents(mytext);
-            mytext.style.cssText = 'color: white; background-color: blue';
+            mytext.style.cssText = 'font-weight: bold; color: white; background-color: blue';
             submitSelectionLabel(label6_name);
 
         }
@@ -353,6 +374,7 @@ export function function6() {
 
 }
 export function function7() {
+    correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
     var word = stringArray[0]
