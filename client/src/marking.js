@@ -35,14 +35,36 @@ function selectionPosition() {
         var sel = window.getSelection();
         var range = sel.getRangeAt(0);
 
-        var startOffset = range.startOffset;
-        var endOffset = startOffset + range.toString().length - 1;
+        var wholeText = range.startContainer.innerText;
+
+        var endOffset = getCaretIndex(window.document.getElementsByClassName("popup-inner")[0]);
+        var startOffset = endOffset - range.toString().length;
+        console.log("Oryginał: " + wholeText.slice(startOffset, endOffset));
 
         console.log("Selection starts at: " + startOffset);
         console.log("Selection ends at: " + endOffset);
         return [startOffset, endOffset]
     }
 }
+
+
+function getCaretIndex(element) {
+  let position = 0;
+  const isSupported = typeof window.getSelection !== "undefined";
+  if (isSupported) {
+    const selection = window.getSelection();
+    if (selection.rangeCount !== 0) {
+      const range = window.getSelection().getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      position = preCaretRange.toString().length;
+    }
+  }
+  return position;
+}
+
+
 
 
 function submitSelectionLabel(label_name) {
