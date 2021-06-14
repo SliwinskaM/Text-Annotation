@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import FileBase from 'react-file-base64';
@@ -24,20 +24,24 @@ const Form = ({ currentId, setCurrentId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     var res = postData.selectedFile.split(",");
-    if(res[0].split('/')[1].split(';')[0]=="pdf"){
+    if (res[0].split('/')[1].split(';')[0] == "pdf") {
       console.log("pdf");
-    }else if(res[0].split('/')[1].split(';')[0]=="plain"){
       if (currentId === 0) {
         dispatch(createDocument(postData));
         clear();
       }
-    }else{
+    } else if (res[0].split('/')[1].split(';')[0] == "plain") {
+      if (currentId === 0) {
+        dispatch(createDocument(postData));
+        clear();
+      }
+    } else {
       alert("Wrong file type");
     }
   };
 
   let fileReader;
-  
+
   const handleFileRead = (e) => {
     const content = fileReader.result;
     console.log(content);
@@ -48,7 +52,7 @@ const Form = ({ currentId, setCurrentId }) => {
     fileReader.onloadend = handleFileRead;
     fileReader.readAsText(file);
   }
-  
+
 
 
   return (
@@ -56,9 +60,9 @@ const Form = ({ currentId, setCurrentId }) => {
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
         <Typography variant="h6">{currentId ? `Editing "${document.title}"` : 'Add file and/or title'}</Typography>
         <TextField name="message" variant="outlined" label="Title" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
-        <div className={classes.fileInput} onChange={ e=> handleFileChosen(e.target.files[0])}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })}
-         /></div>
-        <Button className={classes.buttonSubmit}  variant="contained" size="large" type="submit" fullWidth>Submit</Button>
+        <div className={classes.fileInput} onChange={e => handleFileChosen(e.target.files[0])}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })}
+        /></div>
+        <Button className={classes.buttonSubmit} variant="contained" size="large" type="submit" fullWidth>Submit</Button>
         <Button variant="contained" size="small" onClick={clear} fullWidth>Clear</Button>
       </form>
     </Paper>

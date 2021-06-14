@@ -15,4 +15,10 @@ export default makeStyles(() => ({
   image: {
     marginLeft: '15px',
   },
+  button: {
+    backgroundColor: '#00aeef',
+    borderColor: 'red',
+    borderWidth: 5,
+    borderRadius: 15
+  }
 }));
