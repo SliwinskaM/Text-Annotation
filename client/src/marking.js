@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+var wordIdSufix = 0;
 
 let label1 = [];
 let label2 = [];
@@ -173,7 +174,8 @@ export function function1() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -208,7 +210,8 @@ export function function2() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -241,7 +244,8 @@ export function function3() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -275,7 +279,8 @@ export function function4() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -309,7 +314,8 @@ export function function5() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -343,7 +349,8 @@ export function function6() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
@@ -377,7 +384,8 @@ export function function7() {
     correctSelection()
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
+    var word = stringArray[0] + wordIdSufix;
+    wordIdSufix += 1;
     if (word) {
         var element = window.document.getElementById(word);
         if (element != null) {
