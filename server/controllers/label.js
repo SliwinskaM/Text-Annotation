@@ -28,9 +28,9 @@ export const getLabel = async (req, res) => {
 }
 
 export const createLabel = async (req, res) => {
-    const { title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, creator, tags } = req.body;
+    const { title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, creator, tags } = req.body;
 
-    const label = new Label({ title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, creator, tags })
+    const label = new Label({ title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, creator, tags })
 
     try {
         await label.save();
@@ -50,6 +50,15 @@ export const deleteLabel = async (req, res) => {
     await Label.findByIdAndRemove(id);
 
     res.json({ message: "Label deleted successfully." });
+}
+
+
+export const deleteLabelByInnerId = async (req, res) => {
+  const { id } = req.params;
+
+  await Label.deleteOne({ 'inner_id': id }); 
+
+  res.json({ message: "Label deleted successfully." , inner: id});
 }
 
 

@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import AddDocument from '../models/addDocument.js';
+import Label from '../models/label.js'
 
 const router = express.Router();
 
@@ -42,15 +43,25 @@ export const createDocument = async (req, res) => {
 }
 
 
-export const deleteDocument = async (req, res) => {
-    const { id } = req.params;
+export const deleteDocument = async (req, res, next) => {
+  const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No document with id: ${id}`);
+  if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No document with id: ${id}`);
 
-    await AddDocument.findByIdAndRemove(id);
+  await AddDocument.findById(id, function(err, document){
+    Label.deleteMany({
+      "document_Id": {
+        $in: id
+      }
+    }, function(err) {
+      if(err) return next(err);
+      document.remove();
+    })
+  });
 
-    res.json({ message: "Document deleted successfully." });
+  res.json({ message: "Document deleted successfully." });
 }
+
 
 
 
