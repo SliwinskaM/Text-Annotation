@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 
 import Documents from './components/Documents/Documents';
 import Form from './components/Form/Form';
+import Relation from './components/Relation/Relation';
+
 import { getDocuments } from './actions/posts';
 import { function1, function2, function3, function4, function5, function6, function7, label1_name, label2_name, label3_name, label4_name, label5_name, label6_name, label7_name } from './marking';
 
@@ -29,8 +31,13 @@ const App = () => {
             </Grid>
             <Grid item sm={9}>
               <Grid item sm={12}>
-                <Grid item xs={5} sm={5}>
-                  <Form currentId={currentId} setCurrentId={setCurrentId} />
+                <Grid container spacing={6}>
+                  <Grid item xs={10} sm={5}>
+                    <Form currentId={currentId} setCurrentId={setCurrentId} />
+                  </Grid>
+                  <Grid item xs={10} sm={5}>
+                    <Relation />
+                  </Grid>
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <br></br>
