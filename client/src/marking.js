@@ -22,6 +22,9 @@ export let label7_name = 'event'
 var labelsPositions = {}
 
 let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
+let labelsStyles = {
+  label1_name: 'font-weight: bold; background-color: red'
+}
 
 
 
@@ -36,29 +39,23 @@ export function loadLabels() {
       var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
       var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
       console.log("Start, end ", start, end);
+      var range = window.document.createRange();
+      console.log("Node: ", document.getElementsByClassName("popup-inner")[0].firstChild)
+      console.log("AllNodes: ", document.getElementsByClassName("popup-inner")[0].children)
+      range.setStart(document.getElementsByClassName("popup-inner")[0].firstChild, start);
+      range.setEnd(document.getElementsByClassName("popup-inner")[0].firstChild, end);
+      console.log("w: ", range);
       // inserting label into text
       switch (label.label_name) {
         case label1_name:
-          // console.log("case1")
-          // wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
-          //     label1_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[0] + ";\">" + 
-          //     wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
-          // label1.push(label.inner_id);
-          // console.log(wholeText);
-
           var mytext = window.document.createElement(label.inner_id);
           mytext.id = label.inner_id;
           mytext.className = label1_name;
-          var w = window.document.createRange();
-          console.log("Node: ", document.getElementsByClassName("popup-inner")[0].firstChild)
-          w.setStart(document.getElementsByClassName("popup-inner")[0].firstChild, start);
-          w.setEnd(document.getElementsByClassName("popup-inner")[0].firstChild, end);
-          console.log("w: ", w);
-          w.surroundContents(mytext);
+          range.surroundContents(mytext);
           console.log("mytext: ", mytext);
-          mytext.style.cssText = 'font-weight: bold; background-color: ' + labelsColors[0];
-
-      labelsPositions[label.inner_id] = [start, end];
+          mytext.style.cssText = 'font-weight: bold; background-color: ' + labelsColors[0]; // labelsStyles[label1_name]; // 'font-weight: bold; background-color: ' + labelsColors[0];
+          label1.push(label.inner_id);
+          labelsPositions[label.inner_id] = [start, end];
       }
     }
     })
