@@ -4,7 +4,6 @@ import { loadLabels } from '../../marking.js';
 //<button className="close-btn" onClick = {localStorage.setItem('trigger',false)}>X</button>
 function Popup(props) {
     console.log(global.trigger);
-    console.log("huhuhuuhuhuhuhu");
     loadLabels();
     return(props.trigger) ? (
         <div className="popup">
