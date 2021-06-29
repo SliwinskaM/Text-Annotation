@@ -41,13 +41,13 @@ const App = () => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <br></br>
-                  <Button className={label1_name} style={{ backgroundColor: "red", margin: 10 }} variant="contained" size="small" onClick={function1} >PERSON</Button>
-                  <Button className={label2_name} style={{ backgroundColor: "orange", margin: 10 }} variant="contained" size="small" onClick={function2} >ORG</Button>
-                  <Button className={label3_name} style={{ backgroundColor: "yellow", margin: 10 }} variant="contained" size="small" onClick={function3} >DATE</Button>
-                  <Button className={label4_name} style={{ backgroundColor: "yellowgreen", margin: 10 }} color="#841584" variant="contained" size="small" onClick={function4} >LOCATION</Button>
-                  <Button className={label5_name} style={{ color: "white", backgroundColor: "green", margin: 10 }} variant="contained" size="small" onClick={function5} >NORP</Button>
-                  <Button className={label6_name} style={{ color: "white", backgroundColor: "blue", margin: 10 }} variant="contained" size="small" onClick={function6} >PRODUCT</Button>
-                  <Button className={label7_name} style={{ backgroundColor: "lightblue", margin: 10 }} variant="contained" size="small" onClick={function7} >EVENT</Button>
+                  <Button className={label1_name} style={{ backgroundColor: "red", margin: 10 }} variant="contained" size="small" onClick={function1} >{label1_name}</Button>
+                  <Button className={label2_name} style={{ backgroundColor: "orange", margin: 10 }} variant="contained" size="small" onClick={function2} >{label2_name}</Button>
+                  <Button className={label3_name} style={{ backgroundColor: "yellow", margin: 10 }} variant="contained" size="small" onClick={function3} >{label3_name}</Button>
+                  <Button className={label4_name} style={{ backgroundColor: "yellowgreen", margin: 10 }} color="#841584" variant="contained" size="small" onClick={function4} >{label4_name}</Button>
+                  <Button className={label5_name} style={{ color: "white", backgroundColor: "green", margin: 10 }} variant="contained" size="small" onClick={function5} >{label5_name}</Button>
+                  <Button className={label6_name} style={{ color: "white", backgroundColor: "blue", margin: 10 }} variant="contained" size="small" onClick={function6} >{label6_name}</Button>
+                  <Button className={label7_name} style={{ backgroundColor: "lightblue", margin: 10 }} variant="contained" size="small" onClick={function7} >{label7_name}</Button>
                 </Grid>
               </Grid>
               <Popup trigger={localStorage.getItem('trigger')}></Popup>
