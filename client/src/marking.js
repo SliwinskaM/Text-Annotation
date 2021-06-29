@@ -22,9 +22,6 @@ export let label7_name = 'event'
 var labelsPositions = {}
 
 let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
-let labelsStyles = {
-  label1_name: 'font-weight: bold; background-color: red'
-}
 
 
 
@@ -38,22 +35,16 @@ export function loadLabels() {
       console.log("for: ", label)
       var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
       var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
-      console.log("Start, end ", start, end);
-      var range = window.document.createRange();
-      console.log("Node: ", document.getElementsByClassName("popup-inner")[0].firstChild)
-      console.log("AllNodes: ", document.getElementsByClassName("popup-inner")[0].children)
-      range.setStart(document.getElementsByClassName("popup-inner")[0].firstChild, start);
-      range.setEnd(document.getElementsByClassName("popup-inner")[0].firstChild, end);
-      console.log("w: ", range);
+      start = rawPosition(wholeText, start);
+      end = rawPosition(wholeText, end);
+
       // inserting label into text
       switch (label.label_name) {
         case label1_name:
-          var mytext = window.document.createElement(label.inner_id);
-          mytext.id = label.inner_id;
-          mytext.className = label1_name;
-          range.surroundContents(mytext);
-          console.log("mytext: ", mytext);
-          mytext.style.cssText = 'font-weight: bold; background-color: ' + labelsColors[0]; // labelsStyles[label1_name]; // 'font-weight: bold; background-color: ' + labelsColors[0];
+          wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
+              label1_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[0] + ";\">" + 
+              wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
+          document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
           label1.push(label.inner_id);
           labelsPositions[label.inner_id] = [start, end];
       }
@@ -63,6 +54,16 @@ export function loadLabels() {
       console.log(error);
     });
     }
+
+function rawPosition(wholeText, position) {
+  var countBlocked = false;
+  for (var i = 0; i < wholeText.length; i++) {
+    if (wholeText[i] == '<') countBlocked = true;
+    if (position == 0 && ! countBlocked) return i;
+    if (! countBlocked) position --;
+    if (wholeText[i] == '>') countBlocked = false;
+  }
+}
 
 
 function selectionString() {
@@ -90,22 +91,6 @@ function selectionPosition() {
 		return [-1, -1];
   }
 
-
-// 	function getSelectionParentElement() {
-//     var parentEl = null, sel;
-//     if (window.getSelection) {
-//         sel = window.getSelection();
-//         if (sel.rangeCount) {
-//             parentEl = sel.getRangeAt(0).commonAncestorContainer;
-//             if (parentEl.nodeType != 1) {
-//                 parentEl = parentEl.parentNode;
-//             }
-//         }
-//     } else if ( (sel = document.selection) && sel.type != "Control") {
-//         parentEl = sel.createRange().parentElement();
-//     }
-//     return parentEl;
-// }
 
 
 function getCaretIndex(element) {
