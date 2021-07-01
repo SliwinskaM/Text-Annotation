@@ -3,25 +3,10 @@ import axios from 'axios';
 
 var wordIdSufix = 0;
 
-let label1 = [];
-let label2 = [];
-let label3 = [];
-let label4 = [];
-let label5 = [];
-let label6 = [];
-let label7 = [];
-
-export let label1_name = 'person'
-export let label2_name = 'org'
-export let label3_name = 'date'
-export let label4_name = 'location'
-export let label5_name = 'norp'
-export let label6_name = 'product'
-export let label7_name = 'event'
 
 let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
 let labelsFontsColor = ['black', 'black', 'black', 'black', 'white', 'white', 'black']
-let labelNames = [label1_name, label2_name, label3_name, label4_name, label5_name, label6_name, label7_name]
+export let labelsNames = ['person', 'org', 'date', 'location', 'norp', 'product', 'event']
 
 let labelsAll = []
 let labelsPositions = {}
@@ -33,13 +18,12 @@ export function loadLabels() {
     var wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
     for (var label_idx = 0; label_idx < labels.length; label_idx++) {
       var label = labels[label_idx];
-      var labelNameIdx = labelNames.findIndex(el => el === label.label_name);
+      var labelNameIdx = labelsNames.findIndex(el => el === label.label_name);
       var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
       var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
       start = rawPosition(wholeText, start);
       end = rawPosition(wholeText, end);
-      // console.log("label1_name: ", label1_name, "this label name: ", label.label_name, "dic color: :", labelsStyles[label1_name], "this color: ", labelsStyles[label.label_name])
-
+      
       // inserting label into text
       wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
           label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
@@ -221,24 +205,27 @@ function selectionInLabelCheck() {
 
 
 function clearTables(word) {
-    if (label1.includes(word)) {
-        label1 = label1.filter(item => item !== word);
+    if (labelsAll.includes(word)) {
+      labelsAll = labelsAll.filter(item => item !== word);
     }
-    if (label2.includes(word)) {
-        label2 = label2.filter(item => item !== word);
-    }
-    if (label3.includes(word)) {
-        label3 = label3.filter(item => item !== word);
-    }
-    if (label4.includes(word)) {
-        label4 = label4.filter(item => item !== word);
-    }
-    if (label5.includes(word)) {
-        label5 = label5.filter(item => item !== word);
-    }
-    if (label6.includes(word)) {
-        label6 = label6.filter(item => item !== word);
-    }
+    // if (label1.includes(word)) {
+    //     label1 = label1.filter(item => item !== word);
+    // }
+    // if (label2.includes(word)) {
+    //     label2 = label2.filter(item => item !== word);
+    // }
+    // if (label3.includes(word)) {
+    //     label3 = label3.filter(item => item !== word);
+    // }
+    // if (label4.includes(word)) {
+    //     label4 = label4.filter(item => item !== word);
+    // }
+    // if (label5.includes(word)) {
+    //     label5 = label5.filter(item => item !== word);
+    // }
+    // if (label6.includes(word)) {
+    //     label6 = label6.filter(item => item !== word);
+    // }
 }
 
 
@@ -268,7 +255,7 @@ export function labelWords(label_name) {
 	};
 	
     if (wordId) {
-        var labelNameIdx = labelNames.findIndex(el => el === label_name);
+        var labelNameIdx = labelsNames.findIndex(el => el === label_name);
         var element = window.document.getElementById(wordId);
         if (element != null) {
             if (element.classList.contains("deleted") || !labelsAll.includes(wordId)) {
