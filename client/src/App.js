@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grow, Grid, Button } from '@material-ui/core';
-import { Row } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 
 import Documents from './components/Documents/Documents';
@@ -27,14 +26,16 @@ const App = () => {
         <Container>
           <Grid container justify="space-between" alignItems="flex-start" spacing={1}>
             <Grid item sm={3}>
+              <Grid item> {/* xs={10} sm={5}> */}
+                <Form currentId={currentId} setCurrentId={setCurrentId} />
+              </Grid>
+              <br></br>
+              <br></br>
               <Documents setCurrentId={setCurrentId} />
             </Grid>
             <Grid item sm={9}>
               <Grid item sm={12}>
                 <Grid container spacing={6}>
-                  <Grid item xs={10} sm={5}>
-                    <Form currentId={currentId} setCurrentId={setCurrentId} />
-                  </Grid>
                   <Grid item xs={10} sm={5}>
                     <Relation />
                   </Grid>

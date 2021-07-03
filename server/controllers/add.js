@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 
 import AddDocument from '../models/addDocument.js';
 import Label from '../models/label.js'
+import Relation from '../models/relation.js'
 
 const router = express.Router();
 
@@ -50,6 +51,14 @@ export const deleteDocument = async (req, res, next) => {
 
   await AddDocument.findById(id, function(err, document){
     Label.deleteMany({
+      "document_Id": {
+        $in: id
+      }
+    }, function(err) {
+      if(err) return next(err);
+      document.remove();
+    })
+    Relation.deleteMany({
       "document_Id": {
         $in: id
       }

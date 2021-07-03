@@ -51,11 +51,9 @@ function rawPosition(wholeText, position) {
 }
 
 
-function selectionString() {
-
+export function selectionString() {
     if (window.getSelection().toString()) {
         var sel = window.getSelection();
-        var range = sel.getRangeAt(0);
         return sel.toString();
     } else {
         return ""
@@ -63,7 +61,7 @@ function selectionString() {
 
 }
 
-function selectionPosition() {
+export function selectionPosition() {
     if (typeof window.getSelection != 'undefined') {
         var sel = window.getSelection();
 				if (sel && sel.rangeCount > 0) {
@@ -94,7 +92,7 @@ function getCaretIndex(element) {
   return position;
 }
 
-function correctSelection() {
+export function correctSelection() {
 	var sel = window.getSelection();
 	if (sel && sel.rangeCount > 0) {
 		var range = sel.getRangeAt(0);
@@ -121,7 +119,6 @@ function correctSelection() {
 
 function submitSelectionLabel(label_name, innerId) {
     labelsPositions[innerId] = selectionPosition();
-	// console.log("Labels: " + labels_positions[innerId]);
 
     var b = '';
     var b_position = [-1, -1];
