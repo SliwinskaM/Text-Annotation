@@ -107,7 +107,7 @@ export function correctSelection() {
 			}
 		}
 		for (var i=0; i < 30; i++) {
-			if (endOffset + 1 <= wholeText.length && wholeText.charAt(endOffset) !== " ") {
+			if (endOffset + 1 <= wholeText.length && wholeText.charAt(endOffset).match(/[a-z]/i)) {
 				range.setEnd(range.endContainer, range.endOffset + 1);
 				endOffset += 1;
 			}
@@ -205,29 +205,10 @@ function clearTables(word) {
     if (labelsAll.includes(word)) {
       labelsAll = labelsAll.filter(item => item !== word);
     }
-    // if (label1.includes(word)) {
-    //     label1 = label1.filter(item => item !== word);
-    // }
-    // if (label2.includes(word)) {
-    //     label2 = label2.filter(item => item !== word);
-    // }
-    // if (label3.includes(word)) {
-    //     label3 = label3.filter(item => item !== word);
-    // }
-    // if (label4.includes(word)) {
-    //     label4 = label4.filter(item => item !== word);
-    // }
-    // if (label5.includes(word)) {
-    //     label5 = label5.filter(item => item !== word);
-    // }
-    // if (label6.includes(word)) {
-    //     label6 = label6.filter(item => item !== word);
-    // }
 }
 
 
 export function labelWords(label_name) {
-  // var label_name = 'person';
   correctSelection();
 	var wordId;
 	var selCheck = selectionInLabelCheck();

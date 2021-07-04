@@ -6,6 +6,7 @@ import Documents from './components/Documents/Documents';
 import Form from './components/Form/Form';
 import Relation from './components/Relation/Relation';
 import EditableButton from './components/EditableButton/EditableButton';
+import RelationsTable from './components/RelationsTable/RelationsTable'
 
 import { getDocuments } from './actions/posts';
 import { labelWords, labelsNames } from './marking';
@@ -38,6 +39,9 @@ const App = () => {
                 <Grid container spacing={6}>
                   <Grid item xs={10} sm={5}>
                     <Relation />
+                  </Grid>
+                  <Grid item xs={10} sm={5}>
+                    <RelationsTable />
                   </Grid>
                 </Grid>
                 </Grid>
