@@ -11,7 +11,7 @@ const Document = ({ document }) => {
   const [postData, setPostData] = useState({ message: '', selectedFile: '' });
   const dispatch = useDispatch();
   const classes = useStyles();
-  var res = document.selectedFile.split(",");
+  var res;// = document.selectedFile.split(",");
 
 
   const changeTrigger = (e) => {

@@ -6,7 +6,7 @@ import Documents from './components/Documents/Documents';
 import Form from './components/Form/Form';
 import { getDocuments } from './actions/posts';
 import { function1, function2, function3, function4, function5, function6, function7, label1_name, label2_name, label3_name, label4_name, label5_name, label6_name, label7_name } from './marking';
-
+import { exportJSON } from './export';
 import Popup from './components/PopUp/popup';
 
 
@@ -41,6 +41,7 @@ const App = () => {
                   <Button className={label5_name} style={{ color: "white", backgroundColor: "green", margin: 10 }} variant="contained" size="small" onClick={function5} >NORP</Button>
                   <Button className={label6_name} style={{ color: "white", backgroundColor: "blue", margin: 10 }} variant="contained" size="small" onClick={function6} >PRODUCT</Button>
                   <Button className={label7_name} style={{ backgroundColor: "lightblue", margin: 10 }} variant="contained" size="small" onClick={function7} >EVENT</Button>
+                  <Button className="exportButton" style={{ backgroundColor: "gray", margin: 10 }} variant="contained" size="small" onClick={exportJSON} >EXPORT LABELS</Button>
                 </Grid>
               </Grid>
               <Popup trigger={localStorage.getItem('trigger')}></Popup>
