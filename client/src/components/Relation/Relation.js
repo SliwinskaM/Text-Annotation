@@ -3,6 +3,7 @@ import { Button, Typography, Paper } from '@material-ui/core';
 import { Row } from 'reactstrap';
 import useStyles from './styles';
 import axios from 'axios';
+import RelationsTable from '../RelationsTable/RelationsTable.js'
 
 import { correctSelection, selectionPosition, selectionString } from '../../marking.js'
 
@@ -52,6 +53,7 @@ const Relation = () => {
         word2_position: word2Position,
     }
     axios.post('http://localhost:27017/relations', relation).then(console.log('Dodano do bazy: ')).then(console.log(relation));
+    document.getElementById("relTab").forceUpdate();
   }
 
 
