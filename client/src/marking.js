@@ -1,28 +1,59 @@
 import axios from 'axios';
+// import mongoose from 'mongoose';
+
+var wordIdSufix = 0;
 
 
-let label1 = [];
-let label2 = [];
-let label3 = [];
-let label4 = [];
-let label5 = [];
-let label6 = [];
-let label7 = [];
+let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
+let labelsFontsColor = ['black', 'black', 'black', 'black', 'white', 'white', 'black']
+export let labelsNames = ['person', 'org', 'date', 'location', 'norp', 'product', 'event']
 
-export let label1_name = 'person'
-export let label2_name = 'org'
-export let label3_name = 'date'
-export let label4_name = 'location'
-export let label5_name = 'norp'
-export let label6_name = 'product'
-export let label7_name = 'event'
+let labelsAll = []
+let labelsPositions = {}
 
 
-function selectionString() {
+export function loadLabels() {
+	axios.get('http://localhost:27017/labels/').then(function (response) {
+    var labels = response.data;
+    var wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
+    for (var label_idx = 0; label_idx < labels.length; label_idx++) {
+      var label = labels[label_idx];
+      var labelNameIdx = labelsNames.findIndex(el => el === label.label_name);
+      var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
+      var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
+      start = rawPosition(wholeText, start);
+      end = rawPosition(wholeText, end);
+      
+      // inserting label into text
+      wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
+          label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
+          "; color: " + labelsFontsColor[labelNameIdx] + ";\">" + wholeText.slice(start, end) + "</" + 
+          label.inner_id + ">" + wholeText.slice(end, wholeText.length);
 
+      document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
+      labelsAll.push(label.inner_id);
+      labelsPositions[label.inner_id] = [start, end];
+    }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    }
+
+function rawPosition(wholeText, position) {
+  var countBlocked = false;
+  for (var i = 0; i < wholeText.length; i++) {
+    if (wholeText[i] == '<') countBlocked = true;
+    if (position == 0 && ! countBlocked) return i;
+    if (! countBlocked) position --;
+    if (wholeText[i] == '>') countBlocked = false;
+  }
+}
+
+
+export function selectionString() {
     if (window.getSelection().toString()) {
         var sel = window.getSelection();
-        var range = sel.getRangeAt(0);
         return sel.toString();
     } else {
         return ""
@@ -30,31 +61,74 @@ function selectionString() {
 
 }
 
-function selectionPosition() {
+export function selectionPosition() {
     if (typeof window.getSelection != 'undefined') {
         var sel = window.getSelection();
-        var range = sel.getRangeAt(0);
-
-        var startOffset = range.startOffset;
-        var endOffset = startOffset + range.toString().length - 1;
-
-        console.log("Selection starts at: " + startOffset);
-        console.log("Selection ends at: " + endOffset);
-        return [startOffset, endOffset]
+				if (sel && sel.rangeCount > 0) {
+					var range = sel.getRangeAt(0);
+					var endOffset = getCaretIndex(window.document.getElementsByClassName("popup-inner")[0]);
+					var startOffset = endOffset - range.toString().length;
+					return [startOffset, endOffset]
+				} 
     }
+		return [-1, -1];
+  }
+
+
+
+function getCaretIndex(element) {
+  let position = 0;
+  const isSupported = typeof window.getSelection !== "undefined";
+  if (isSupported) {
+    const selection = window.getSelection();
+    if (selection.rangeCount !== 0) {
+      const range = window.getSelection().getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      position = preCaretRange.toString().length;
+    }
+  }
+  return position;
+}
+
+export function correctSelection() {
+	var sel = window.getSelection();
+	if (sel && sel.rangeCount > 0) {
+		var range = sel.getRangeAt(0);
+		var div = window.document.getElementsByClassName("popup-inner")[0];
+		var wholeText = div.innerText;
+		var startOffset = selectionPosition()[0];
+		var endOffset = selectionPosition()[1];
+		for (var i=0; i < 30; i++) {
+			if (startOffset - 1 >= 0 && wholeText.charAt(startOffset - 1) !== " ") {
+			range.setStart(range.startContainer, range.startOffset - 1);
+			startOffset -= 1;
+			}
+		}
+		for (var i=0; i < 30; i++) {
+			if (endOffset + 1 <= wholeText.length && wholeText.charAt(endOffset) !== " ") {
+				range.setEnd(range.endContainer, range.endOffset + 1);
+				endOffset += 1;
+			}
+		}
+	}
 }
 
 
-function submitSelectionLabel(label_name) {
+
+function submitSelectionLabel(label_name, innerId) {
+    labelsPositions[innerId] = selectionPosition();
+
     var b = '';
-    var b_position = [];
+    var b_position = [-1, -1];
     var i = [];
-    var i_position = [];
+    var i_position = [-1, -1];
     var l = '';
-    var l_position = [];
+    var l_position = [-1, -1];
     var u = '';
-    var u_position = []
-    var labelWords = selectionString().split(' ');
+    var u_position = [-1, -1]
+    var labelWords = selectionString().split(/\W+/); 
     if (labelWords.length == 1) {
         u = labelWords[0];
         u_position = selectionPosition();
@@ -83,282 +157,134 @@ function submitSelectionLabel(label_name) {
         l: l,
         l_position: l_position,
         u: u,
-        u_position: u_position
+        u_position: u_position,
+        inner_id: innerId
     }
     axios.post('http://localhost:27017/labels', label).then(console.log('Dodano do bazy: ')).then(console.log(label));
 }
 
 
-function selectHTML(item) {
-    try {
-        if (window.ActiveXObject) {
-            var c = document.selection.createRange();
-            return c.htmlText;
-        }
+function selectionInLabelCheck() {
+	var currentPos = selectionPosition();
 
-        var nNd = document.createElement(item);
-        var w = getSelection().getRangeAt(0);
-        w.surroundContents(nNd);
-        return nNd;
-    } catch (e) {
-        if (window.ActiveXObject) {
-            return document.selection.createRange();
-        } else {
-            return getSelection();
-        }
-    }
+	for(var innerId in labelsPositions) {
+		var start = labelsPositions[innerId][0];
+		var end = labelsPositions[innerId][1];
+		if( (currentPos[0] >= start && currentPos[0] <= end) || (currentPos[1] >= start && currentPos[1] <= end ) ) { 
+			return innerId;
+		}
+	  }
+	return -1;
+
 }
+
+
+// function selectHTML(item) {
+//     try {
+//         if (window.ActiveXObject) {
+//             var c = document.selection.createRange();
+//             return c.htmlText;
+//         }
+
+//         var nNd = document.createElement(item);
+//         var w = getSelection().getRangeAt(0);
+//         w.surroundContents(nNd);
+//         return nNd;
+//     } catch (e) {
+//         if (window.ActiveXObject) {
+//             return document.selection.createRange();
+//         } else {
+//             return getSelection();
+//         }
+//     }
+// }
 
 
 
 function clearTables(word) {
-    if (label1.includes(word)) {
-        label1 = label1.filter(item => item !== word);
+    if (labelsAll.includes(word)) {
+      labelsAll = labelsAll.filter(item => item !== word);
     }
-    if (label2.includes(word)) {
-        label2 = label2.filter(item => item !== word);
-    }
-    if (label3.includes(word)) {
-        label3 = label3.filter(item => item !== word);
-    }
-    if (label4.includes(word)) {
-        label4 = label4.filter(item => item !== word);
-    }
-    if (label5.includes(word)) {
-        label5 = label5.filter(item => item !== word);
-    }
-    if (label6.includes(word)) {
-        label6 = label6.filter(item => item !== word);
-    }
+    // if (label1.includes(word)) {
+    //     label1 = label1.filter(item => item !== word);
+    // }
+    // if (label2.includes(word)) {
+    //     label2 = label2.filter(item => item !== word);
+    // }
+    // if (label3.includes(word)) {
+    //     label3 = label3.filter(item => item !== word);
+    // }
+    // if (label4.includes(word)) {
+    //     label4 = label4.filter(item => item !== word);
+    // }
+    // if (label5.includes(word)) {
+    //     label5 = label5.filter(item => item !== word);
+    // }
+    // if (label6.includes(word)) {
+    //     label6 = label6.filter(item => item !== word);
+    // }
 }
 
-export function function1() {
+
+export function labelWords(label_name) {
+  // var label_name = 'person';
+  correctSelection();
+	var wordId;
+	var selCheck = selectionInLabelCheck();
+	var inSelection;
+  // if word isn't already selected
+	if (selCheck == -1) {
+		inSelection = false;
     var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
+    var stringArray = selectedWord.split(/\W+/);
+    var wordIdSufix = selectionPosition()[0];
+		// if selecting text didn't throw an error
+		if (wordIdSufix !== -1) {
+    	wordId = stringArray[0] + wordIdSufix;
+		} else {
+			alert("Select a part of the text!");
+			return;
+		}
+	} else { 
+		// if word is already selected
+		inSelection = true;
+		wordId = selCheck;
+	};
+	
+    if (wordId) {
+        var labelNameIdx = labelsNames.findIndex(el => el === label_name);
+        var element = window.document.getElementById(wordId);
         if (element != null) {
-            if (element.classList.contains("deleted") || !label1.includes(word)) {
-                clearTables(word);
-                label1.push(word);
-                element.className = "person";
-                element.style.cssText = 'font-weight: bold; background-color: red';
-                submitSelectionLabel(label1_name);
+            if (element.classList.contains("deleted") || !labelsAll.includes(wordId)) {
+                clearTables(wordId);
+													// if (inSelection) {
+					// 	alert("A part of the selection is already labeled!");
+					// 	return;
+					// }
+                labelsAll.push(wordId);
+                element.className = label_name;
+                element.style.cssText = "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + "; color: " + labelsFontsColor[labelNameIdx];
+                submitSelectionLabel(label_name, wordId);
             } else {
-                label1 = label1.filter(item => item != word);
-                element.classList.remove("person");
+                labelsAll = labelsAll.filter(item => item != wordId);
+                element.classList.remove(label_name);
                 element.className = "deleted";
+                axios.delete('http://localhost:27017/labels/inner/' + wordId).then(console.log('Usunięto: ')).then(console.log(wordId))
                 element.style.cssText = 'font-weight: normal; background-color: transparent';
             }
         } else {
-            label1.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "person";
+										// if (inSelection) {
+					// 	alert("A part of the selection is already labeled!");
+					// 	return;
+					// }
+            labelsAll.push(wordId);
+            var mytext = window.document.createElement(wordId);
+            mytext.id = wordId;
+            mytext.className = label_name;
             var w = getSelection().getRangeAt(0);
             w.surroundContents(mytext);
-            mytext.style.cssText = 'font-weight: bold; background-color: red';
-            submitSelectionLabel(label1_name);
+            mytext.style.cssText = "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + "; color: " + labelsFontsColor[labelNameIdx];
+            submitSelectionLabel(label_name, wordId);
         }
     }
-
-
-}
-
-export function function2() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label2.includes(word)) {
-                clearTables(word);
-                label2.push(word);
-                element.className = "org";
-                element.style.cssText = 'font-weight: bold; background-color: orange';
-                submitSelectionLabel(label2_name);
-            } else {
-                label2 = label2.filter(item => item != word);
-                element.classList.remove("org");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label2.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "org";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'font-weight: bold; background-color: orange';
-            submitSelectionLabel(label2_name);
-
-        }
-    }
-}
-export function function3() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label3.includes(word)) {
-                clearTables(word);
-                label3.push(word);
-                element.className = "date";
-                element.style.cssText = 'font-weight: bold; background-color: yellow';
-                submitSelectionLabel(label3_name);
-            } else {
-                label3 = label3.filter(item => item !== word);
-                element.classList.remove("date");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label3.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "date";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'font-weight: bold; background-color: yellow';
-            submitSelectionLabel(label3_name);
-
-        }
-    }
-
-}
-export function function4() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label4.includes(word)) {
-                clearTables(word);
-                label4.push(word);
-                element.className = "location";
-                element.style.cssText = 'font-weight: bold; background-color: yellowgreen';
-                submitSelectionLabel(label4_name);
-            } else {
-                label4 = label4.filter(item => item !== word);
-                element.classList.remove("location");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label4.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "location";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'font-weight: bold; background-color: yellowgreen';
-            submitSelectionLabel(label4_name);
-
-        }
-    }
-}
-
-export function function5() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label5.includes(word)) {
-                clearTables(word);
-                label5.push(word);
-                element.className = "norp";
-                element.style.cssText = 'color: white; background-color: green';
-                submitSelectionLabel(label5_name);
-            } else {
-                label5 = label5.filter(item => item !== word);
-                element.classList.remove("norp");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label5.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "norp";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'color: white; background-color: green';
-            submitSelectionLabel(label5_name);
-
-        }
-    }
-
-}
-export function function6() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label6.includes(word)) {
-                clearTables(word);
-                label6.push(word);
-                element.className = "label6";
-                element.style.cssText = 'color: white; background-color: blue';
-                submitSelectionLabel(label6_name);
-            } else {
-                label6 = label6.filter(item => item !== word);
-                element.classList.remove("label6");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label6.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "label6";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'color: white; background-color: blue';
-            submitSelectionLabel(label6_name);
-
-        }
-    }
-
-}
-export function function7() {
-    var selectedWord = selectionString();
-    var stringArray = selectedWord.split(/(\s+)/);
-    var word = stringArray[0]
-    if (word) {
-        var element = window.document.getElementById(word);
-        if (element != null) {
-            if (element.classList.contains("deleted") || !label7.includes(word)) {
-                clearTables(word);
-                label7.push(word);
-                element.className = "event";
-                element.style.cssText = 'font-weight: bold; background-color: lightblue';
-                submitSelectionLabel(label7_name);
-            } else {
-                label5 = label5.filter(item => item !== word);
-                element.classList.remove("event");
-                element.className = "deleted";
-                element.style.cssText = 'font-weight: normal; background-color: transparent';
-            }
-        } else {
-            label7.push(word);
-            var mytext = window.document.createElement(word);
-            mytext.id = word;
-            mytext.className = "event";
-            var w = getSelection().getRangeAt(0);
-            w.surroundContents(mytext);
-            mytext.style.cssText = 'font-weight: bold; background-color: lightblue';
-            submitSelectionLabel(label7_name);
-        }
-    }
-
 }
