@@ -53,7 +53,7 @@ const Relation = () => {
         word2_position: word2Position,
     }
     axios.post('http://localhost:27017/relations', relation).then(console.log('Dodano do bazy: ')).then(console.log(relation));
-    document.getElementById("relTab").forceUpdate();
+    // document.getElementById("relTab").forceUpdate();
   }
 
 
