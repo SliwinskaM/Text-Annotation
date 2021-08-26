@@ -43,6 +43,7 @@ const Relation = () => {
 
 
   function add() {
+    localStorage.setItem('user', 'user');
     const relation = {
         document_Id: localStorage.getItem('currentPostId'),
         relation_name: document.getElementById("name").value,
@@ -51,6 +52,7 @@ const Relation = () => {
         word2: word2,
         word1_position: word1Position,
         word2_position: word2Position,
+        user: localStorage.getItem('user'),
     }
     axios.post('http://localhost:27017/relations', relation).then(console.log('Dodano do bazy: ')).then(console.log(relation));
     // document.getElementById("relTab").forceUpdate();
@@ -58,8 +60,8 @@ const Relation = () => {
 
 
   return (
-    <Paper className={classes.paper} >
-      <Typography variant="h6" align="center">Add relation</Typography>
+    <Paper className={classes.paper} style={{height: 300}}>
+      <Typography variant="h6" align="center" >Add relation</Typography>
       <Row>
         <Button variant="contained" size="small" style={{ margin: 10 }} onClick={output1} >Word 1</Button>
         <input id="printFirst" readonly="true" type="text"></input>
@@ -72,13 +74,15 @@ const Relation = () => {
         <h style={{ margin: 10 }} >Relation power</h>
         <input id="power" type="text"></input>
       </Row>
+      <br></br>
       <Row>
-        <h style={{ margin: 10 }} >Relation name</h>
+        <h style={{ margin: 10 }} >Relation name </h>
         <input id="name" type="text"></input>
       </Row>
-      <Button variant="contained" size="small" style={{ marginTop: 10 }} onClick={add} fullWidth>Add relation</Button>
-      <Button variant="contained" size="small" style={{ marginTop: 10 }} onClick={clear} fullWidth>Clear</Button>
-    </Paper>
+      <br></br>
+      <Button style={{backgroundColor: "#242424", color: "white", marginTop: 10}} variant="contained" size="small" onClick={add} fullWidth>Add relation</Button>
+      <Button style={{backgroundColor: "#242424", color: "white", marginTop: 10}} variant="contained" size="small" onClick={clear} fullWidth>Clear</Button>
+    </Paper> 
   );
 };
 

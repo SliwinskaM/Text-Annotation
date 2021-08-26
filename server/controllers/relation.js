@@ -29,9 +29,9 @@ export const getRelation = async (req, res) => {
 
 
 export const createRelation = async (req, res) => {
-    const { title, document_Id, relation_name, relation_power, word1, word2, word1_position, word2_position, creator, tags } = req.body;
+    const { title, document_Id, relation_name, relation_power, word1, word2, word1_position, word2_position, user, creator, tags } = req.body;
 
-    const relation = new Relation({ title, document_Id, relation_name, relation_power, word1, word2, word1_position, word2_position, creator, tags })
+    const relation = new Relation({ title, document_Id, relation_name, relation_power, word1, word2, word1_position, word2_position, user, creator, tags })
 
     try {
         await relation.save();

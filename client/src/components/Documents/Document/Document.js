@@ -1,17 +1,18 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@material-ui/core/';
+import {Button, Typography } from '@material-ui/core/';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { OpenInNew } from "@material-ui/icons";
+import { BorderAllRounded, OpenInNew } from "@material-ui/icons";
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { deleteDocument } from '../../../actions/posts';
 import useStyles from './styles';
+import { grey, red } from '@material-ui/core/colors';
 
 const Document = ({ document }) => {
   const [postData, setPostData] = useState({ message: '', selectedFile: '' });
   const dispatch = useDispatch();
   const classes = useStyles();
-  var res;// = document.selectedFile.split(",");
+  var res = document.selectedFile.split(",");
 
 
   const changeTrigger = (e) => {
@@ -35,20 +36,20 @@ const Document = ({ document }) => {
   };
 
   return (
+    <div>
+    <div style={{ backgroundColor: "#ffffff", padding: 10, borderRadius: 5,}}>
+    <div>
+      <Typography variant="h5" component="p"  color="common.white" >{document.message}</Typography>
+    </div>
 
-    <Card className={classes.card}>
-      <CardMedia className={classes.media} image={document.selectedFile} />
-      <CardContent>
-        <Typography variant="h5" component="p">{document.message}</Typography>
-      </CardContent>
-
-      <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => dispatch(deleteDocument(document._id))}><DeleteIcon fontSize="small" /> Delete</Button>
-        {/*TODO: Open file in a new tab*/}
-        <Button size="small" color="primary" onClick={changeTrigger}><OpenInNew fontSize="small" /> Open</Button>
-
-      </CardActions>
-    </Card>
+    <div>
+      <Button size="small" color="primary" onClick={() => dispatch(deleteDocument(document._id))}><DeleteIcon fontSize="small" /> Delete</Button>
+      {/*TODO: Open file in a new tab*/}
+      <Button size="small" color="primary" onClick={changeTrigger}><OpenInNew fontSize="small" /> Open</Button>
+    </div>
+    </div>
+    <br></br>
+    </div>
   );
 };
 

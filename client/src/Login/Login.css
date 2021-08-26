@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+body{
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: 'Numans', sans-serif;
+background-color: #001e52;
+/* margin-left: 600px; */
+margin-top: 100px;
+}
+
+.Login{
+height: 100%;
+align-content: center;
+}
+
+.card{
+height: 370px;
+margin-top: auto;
+margin-bottom: auto;
+padding: 10px;
+width: 400px;
+background-color: rgba(0,0,0,0.5) !important;
+border-radius: 10px;
+}
+
+.card-body form{
+    margin:10px;
+    font-size: 20px;
+}
+
+.card-header h3{
+color: white;
+font-size: 30px;
+margin-left: 20px;
+}
+
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+}
+
+.remember{
+color: white;
+margin-top: 20px;
+font-size: 15px;
+}
+
+.form-group{
+    padding: 10px;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login_btn{
+color: black;
+margin-top: 10px;
+background-color: #fdca31;
+width: 200px;
+font-size: 20px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}

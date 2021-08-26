@@ -56,14 +56,16 @@ const Form = ({ currentId, setCurrentId }) => {
 
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.paper} style={{height: 300}}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-        <Typography variant="h6">{currentId ? `Editing "${document.title}"` : 'Add file and/or title'}</Typography>
-        <TextField name="message" variant="outlined" label="Title" fullWidth multiline rows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
+        <Typography variant="h6" align="center">{currentId ? `Editing "${document.title}"` : 'Add file'}</Typography>
+        <TextField name="message" variant="outlined" label="Title" fullWidth multiline rows={2} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
         <div className={classes.fileInput} onChange={e => handleFileChosen(e.target.files[0])}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })}
         /></div>
-        <Button className={classes.buttonSubmit} variant="contained" size="large" type="submit" fullWidth>Submit</Button>
-        <Button variant="contained" size="small" onClick={clear} fullWidth>Clear</Button>
+        <br></br>
+        <br></br>
+        <Button style={{backgroundColor: "#242424", color: "white"}} className={classes.buttonSubmit} variant="contained" size="large" type="submit" fullWidth>Submit</Button>
+        <Button style={{backgroundColor: "#242424", color: "white"}} variant="contained" size="small" onClick={clear} fullWidth>Clear</Button>
       </form>
     </Paper>
   );

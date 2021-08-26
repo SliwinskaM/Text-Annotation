@@ -31,14 +31,15 @@ class RelationsTable extends Component {
 
   render() {
     return (
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Power</TableCell>
-              <TableCell align="right">Word 1</TableCell>
-              <TableCell align="right">Word 2</TableCell>
+      <TableContainer component={Paper} style={{maxHeight: 332}}>
+        <Table aria-label="simple table" >
+          <TableHead style={{backgroundColor: "#242424"}}>
+            <TableRow >
+              <TableCell style={{color: "white"}}>Name</TableCell>
+              <TableCell align="right" style={{color: "white"}}>Power</TableCell>
+              <TableCell align="right" style={{color: "white"}}>Word 1</TableCell>
+              <TableCell align="right" style={{color: "white"}}>Word 2</TableCell>
+              <TableCell align="right" style={{color: "white"}}>Reporter</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -50,6 +51,7 @@ class RelationsTable extends Component {
                 <TableCell align="right">{row.relation_power}</TableCell>
                 <TableCell align="right">{row.word1}</TableCell>
                 <TableCell align="right">{row.word2}</TableCell>
+                <TableCell align="right">{row.user}</TableCell>
               </TableRow>
             ))}
           </TableBody>

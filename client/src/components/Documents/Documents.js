@@ -11,13 +11,16 @@ const Documents = ({ setCurrentId }) => {
 
   return (
     !documents.length ? <CircularProgress /> : (
-      <Grid className={classes.container} direction="column" container alignItems="flex-start" spacing={3}>
+      <div style={{marginLeft: 10}}>
+      <div style={{color: "white", marginBottom: 20, fontSize: 20, fontFamily: "Courier New"}}>Your files: </div>
+      <Grid className={classes.container} class="allFiles" direction="column" container alignItems="flex-start" spacing={3}>
         {documents.map((post) => (
           <Grid  key={post._id} item xs={12} sm={12} md={12}>
             <Document document={post} setCurrentId={setCurrentId} />
           </Grid>
         ))}
       </Grid>
+      </div>
     )
   );
 };

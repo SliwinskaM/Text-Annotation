@@ -1,0 +1,17 @@
+.header{
+    color: white;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 0px;
+    font-family: "Courier New";
+}
+
+.user{
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 0px;
+    font-family: "Courier New";
+}

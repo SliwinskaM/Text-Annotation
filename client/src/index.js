@@ -5,12 +5,12 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import { reducers } from './reducers';
-import App from './App';
+import Main from './Main';
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Main />
   </Provider>,
   document.getElementById('root'),
 );

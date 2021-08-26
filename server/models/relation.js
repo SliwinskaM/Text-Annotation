@@ -8,6 +8,8 @@ const postSchema = mongoose.Schema({
   word2: String,
   word1_position: Array,
   word2_position: Array,
+  //addded
+  user: String,
 })
 
 

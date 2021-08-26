@@ -11,7 +11,8 @@ export default makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   form: {
-    display: 'flex',
+    //display: 'flex',
+    margin: 10,
     flexWrap: 'wrap',
     justifyContent: 'center',
   },
