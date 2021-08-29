@@ -12,6 +12,7 @@ let labelsAll = []
 let labelsPositions = {}
 
 
+
 export function loadLabels() {
 	axios.get('http://localhost:27017/labels/').then(function (response) {
     var labels = response.data;
@@ -27,7 +28,7 @@ export function loadLabels() {
       // inserting label into text
       wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
           label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
-          "; color: " + labelsFontsColor[labelNameIdx] + ";\">" + wholeText.slice(start, end) + "</" + 
+          "; color: " + labelsFontsColor[labelNameIdx] + ";\" onMouseEnter = {showLabelDetails}>" + wholeText.slice(start, end) + "</" + 
           label.inner_id + ">" + wholeText.slice(end, wholeText.length);
 
       document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;

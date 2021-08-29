@@ -9,15 +9,15 @@
     text-align: justify;
     line-height: 200%;
     margin-left: 20px;
-}
-
+}     
+        
 .popup .close-btn{
     position: absolute;
     top: 16px;
-    right: 16px;
-    height:20px;
-    border-radius: 10px;
-}
+    right: 16px;   
+    height:20px;    
+    border-radius: 10px;    
+}          
 
 .popup .popup-inner{
     position: relative;

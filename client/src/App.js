@@ -11,7 +11,13 @@ import RelationsTable from './components/RelationsTable/RelationsTable'
 import { getDocuments } from './actions/posts';
 import { labelWords, labelsNames } from './marking';
 import Popup from './components/PopUp/popup';
+import LabelPopUp from './components/LabelPopUp/labelPopUp';
 import './app.css'
+
+function showLabelDetails(){
+  console.log("uhuhu")
+}
+
 const App = () => {
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
@@ -51,6 +57,7 @@ const App = () => {
                   <EditableButton xs={2} text={labelsNames[4]} labelId={4} className={labelsNames[4]} style={{ color: "white", backgroundColor: "green", margin: 10 }} onClick={() => labelWords(labelsNames[4])}/>
                   <EditableButton xs={2} text={labelsNames[5]} labelId={5} className={labelsNames[5]} style={{ color: "white", backgroundColor: "blue", margin: 10 }} onClick={() => labelWords(labelsNames[5])}/>
                   <EditableButton xs={2} text={labelsNames[6]} labelId={6} className={labelsNames[6]} style={{ backgroundColor: "lightblue", margin: 10 }} onClick={() => labelWords(labelsNames[6])}/>
+                  <LabelPopUp trigger={localStorage.getItem('labelTrigger')}></LabelPopUp>
                 </Grid>
                 {/* <Button s={3} style={{ backgroundColor: "white", marginRight: 10}} onClick={() => showRelations()}>See all relations</Button> */}
               <Popup trigger={localStorage.getItem('trigger')}></Popup>
