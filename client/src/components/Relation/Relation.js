@@ -43,7 +43,6 @@ const Relation = () => {
 
 
   function add() {
-    localStorage.setItem('user', 'user');
     const relation = {
         document_Id: localStorage.getItem('currentPostId'),
         relation_name: document.getElementById("name").value,

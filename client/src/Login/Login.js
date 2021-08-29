@@ -3,18 +3,35 @@ import { Container, Grow, Grid, Button } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import './Login.css'
 import { Route } from 'react-router-dom'
+import axios from 'axios';
 
 const LoginButton = () => (
   <Route render={({ history}) => (
     <button
       type='button'
-      onClick={() => { history.push('/Details') }}
+      onClick={() => { loginUser(history) }}
       class="btn float-right login_btn"
     >
       Login!
     </button>
   )} />
 )
+
+function loginUser(history) {
+    const user = {
+        userName: document.getElementById("user").value,
+        password: document.getElementById("password").value
+    }
+    axios.post('http://localhost:27017/login', user).then((response) => {
+        localStorage.setItem('user', user.userName);
+        localStorage.setItem('wrongPass', '')
+        history.push('/Details');
+        }, (error) => {
+            window.location.reload();
+            localStorage.setItem('wrongPass', 'Wrong credentials! Try again!')
+    })
+}
+
 function Login() {
     return (
         <div class="Login d-flex justify-content-center" style={{marginLeft: 600,}}>
@@ -30,17 +47,17 @@ function Login() {
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" placeholder="username"/>
+                            <input type="text" class="form-control" id="user" placeholder="username"/>
                             
                         </div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <input type="password" class="form-control" placeholder="password"/>
+                            <input type="password" class="form-control" id="password" placeholder="password"/>
                         </div>
                         <div class="row align-items-center remember">
-                            <input type="checkbox"/>Remember Me
+                            {localStorage.getItem('wrongPass')}
                         </div>
                         <LoginButton></LoginButton>
                     </form>
