@@ -28,9 +28,9 @@ export const getLabel = async (req, res) => {
 }
 
 export const createLabel = async (req, res) => {
-    const { title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, creator, tags } = req.body;
+    const { title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, user, creator, tags } = req.body;
 
-    const label = new Label({ title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, creator, tags })
+    const label = new Label({ title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, user, creator, tags })
 
     try {
         await label.save();

@@ -2,9 +2,8 @@ import React from 'react';
 import './styles.css'
 import { loadLabels } from '../../marking.js';
 
-
 function Popup(props) {
-    console.log(global.trigger);
+    // console.log(global.trigger);
     loadLabels();
     return(props.trigger) ? (
         <div className="popup">
@@ -13,7 +12,7 @@ function Popup(props) {
                 <div className="popup-inner">
                     {localStorage.getItem('text')}
                 </div>
-        </div>
+        </div>    
 
     ) : "";
 }

@@ -11,8 +11,6 @@ export let labelsNames = ['person', 'org', 'date', 'location', 'norp', 'product'
 let labelsAll = []
 let labelsPositions = {}
 
-
-
 export function loadLabels() {
 	axios.get('http://localhost:27017/labels/').then(function (response) {
     var labels = response.data;
@@ -26,11 +24,13 @@ export function loadLabels() {
       end = rawPosition(wholeText, end);
       
       // inserting label into text
-      wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=" + 
-          label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
-          "; color: " + labelsFontsColor[labelNameIdx] + ";\" onMouseEnter = {showLabelDetails}>" + wholeText.slice(start, end) + "</" + 
-          label.inner_id + ">" + wholeText.slice(end, wholeText.length);
-
+      //first version doesn't work
+      var mouseOver = "onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}"
+      mouseOver = "onMouseEnter={localStorage.setItem('userLabel','"+label.user+"');}"
+      wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=\"" + label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
+          "; color: " + labelsFontsColor[labelNameIdx] + ";\" "+ mouseOver+">" + wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
+      console.log("onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}")
+      console.log(wholeText)
       document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
       labelsAll.push(label.inner_id);
       labelsPositions[label.inner_id] = [start, end];
@@ -159,7 +159,8 @@ function submitSelectionLabel(label_name, innerId) {
         l_position: l_position,
         u: u,
         u_position: u_position,
-        inner_id: innerId
+        inner_id: innerId,
+        user: localStorage.getItem('user')
     }
     axios.post('http://localhost:27017/labels', label).then(console.log('Dodano do bazy: ')).then(console.log(label));
 }

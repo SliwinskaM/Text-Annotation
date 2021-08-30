@@ -12,7 +12,8 @@ const postSchema = mongoose.Schema({
   l_position: Array,
   u: String,
   u_position: Array,
-  inner_id: String
+  inner_id: String,
+  user: String
 })
 
 
