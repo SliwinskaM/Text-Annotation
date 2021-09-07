@@ -15,6 +15,16 @@ export const getRelations = async (req, res) => {
     }
 }
 
+export const getFilteredRelations = async (req, res) => {
+  try {
+      const relations = await Relation.find(req.query);
+
+      res.status(200).json(relations);
+  } catch (error) {
+      res.status(404).json({ message: error.message });
+  }
+}
+
 export const getRelation = async (req, res) => {
     const { id } = req.params;
 

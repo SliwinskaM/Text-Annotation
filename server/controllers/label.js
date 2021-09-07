@@ -15,7 +15,7 @@ export const getLabels = async (req, res) => {
     }
 }
 
-export const getLabel = async (req, res) => {
+export const getLabelById = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -25,6 +25,21 @@ export const getLabel = async (req, res) => {
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
+}
+
+
+export const getFilteredLabels = async (req, res) => {
+  // const { title, document_Id, label_name, label_whole, b, b_position, i, i_position, l, l_position, u, u_position, inner_id, user, creator, tags } = req.body;
+
+  try {
+      const post = await Label.find(req.query)
+      // console.log(req.params)
+      // console.log(req.body)
+      console.log(req.query)
+      res.status(200).json(post);
+  } catch (error) {
+      res.status(404).json({ message: error.message });
+  }
 }
 
 export const createLabel = async (req, res) => {

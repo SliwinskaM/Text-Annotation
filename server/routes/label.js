@@ -1,12 +1,14 @@
 import express from 'express';
 
-import { getLabels, getLabel, createLabel, deleteLabel, deleteLabelByInnerId } from '../controllers/label.js';
+import { getLabels, getLabelById, getFilteredLabels, createLabel, deleteLabel, deleteLabelByInnerId } from '../controllers/label.js';
 
 const router = express.Router();
 
-router.get('/', getLabels);
+router.get('/all/', getLabels);
+router.get('/', getFilteredLabels);
 router.post('/', createLabel);
-router.get('/:id', getLabel);
+router.get('/:id', getLabelById);
+// router.get('/', getLabel);
 router.delete('/:id', deleteLabel);
 router.delete('/inner/:id', deleteLabelByInnerId);
 

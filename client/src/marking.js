@@ -12,29 +12,35 @@ let labelsAll = []
 let labelsPositions = {}
 
 export function loadLabels() {
-	axios.get('http://localhost:27017/labels/').then(function (response) {
-    var labels = response.data;
-    var wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
-    for (var label_idx = 0; label_idx < labels.length; label_idx++) {
-      var label = labels[label_idx];
-      var labelNameIdx = labelsNames.findIndex(el => el === label.label_name);
-      var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
-      var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
-      start = rawPosition(wholeText, start);
-      end = rawPosition(wholeText, end);
-      
-      // inserting label into text
-      //first version doesn't work
-      var mouseOver = "onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}"
-      mouseOver = "onMouseEnter={localStorage.setItem('userLabel','"+label.user+"');}"
-      wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=\"" + label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
-          "; color: " + labelsFontsColor[labelNameIdx] + ";\" "+ mouseOver+">" + wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
-      console.log("onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}")
-      console.log(wholeText)
-      document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
-      labelsAll.push(label.inner_id);
-      labelsPositions[label.inner_id] = [start, end];
-    }
+  // get labels for a specific document
+	axios.get('http://localhost:27017/labels/', 
+    { params: {
+      document_Id: localStorage.getItem('currentPostId')
+    }}).then(function (response) { 
+      console.log(localStorage.getItem('currentPostId'));
+      var labels = response.data;
+      console.log(labels);
+      var wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
+      for (var label_idx = 0; label_idx < labels.length; label_idx++) {
+        var label = labels[label_idx];
+        var labelNameIdx = labelsNames.findIndex(el => el === label.label_name);
+        var start = label.b_position[0] >= 0 ? label.b_position[0] : label.u_position[0];
+        var end = label.l_position[1] >= 0 ? label.l_position[1] : label.u_position[1];
+        start = rawPosition(wholeText, start);
+        end = rawPosition(wholeText, end);
+        
+        // inserting label into text
+        //first version doesn't work
+        var mouseOver = "onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}"
+        mouseOver = "onMouseEnter={localStorage.setItem('userLabel','"+label.user+"');}"
+        wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=\"" + label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
+            "; color: " + labelsFontsColor[labelNameIdx] + ";\" "+ mouseOver+">" + wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
+        // console.log("onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}")
+        // console.log(wholeText)
+        document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
+        labelsAll.push(label.inner_id);
+        labelsPositions[label.inner_id] = [start, end];
+      }
     })
     .catch(function (error) {
       console.log(error);

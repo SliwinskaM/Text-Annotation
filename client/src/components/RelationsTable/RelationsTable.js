@@ -19,7 +19,10 @@ class RelationsTable extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:27017/relations")
+      .get("http://localhost:27017/relations/", 
+      { params: {
+        document_Id: localStorage.getItem('currentPostId')
+      }})
       .then((response) => {
         this.setState({ relations: response.data });
         // setRelations(relations => response);
