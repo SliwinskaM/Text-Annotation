@@ -33,9 +33,6 @@ export const getFilteredLabels = async (req, res) => {
 
   try {
       const post = await Label.find(req.query)
-      // console.log(req.params)
-      // console.log(req.body)
-      console.log(req.query)
       res.status(200).json(post);
   } catch (error) {
       res.status(404).json({ message: error.message });

@@ -9,12 +9,19 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 
+import { markRelation } from "../../marking.js"
+
 import { useDispatch } from 'react-redux';
 import { getRelations } from '../../actions/relations';
 
 class RelationsTable extends Component {
   state = {
     relations: []
+  }
+
+  handleClick(row) {
+    console.log(row);
+    markRelation([row.word1_position, row.word2_position], row.relation_name);
   }
 
   componentDidMount() {
@@ -47,7 +54,7 @@ class RelationsTable extends Component {
           </TableHead>
           <TableBody>
             {this.state.relations.map((row) => (
-              <TableRow key={row._id}>
+              <TableRow key={row._id} onClick={() => this.handleClick(row)}>
                 <TableCell component="th" scope="row">
                   {row.relation_name}
                 </TableCell>

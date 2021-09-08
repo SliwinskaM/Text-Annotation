@@ -10,6 +10,7 @@ export let labelsNames = ['person', 'org', 'date', 'location', 'norp', 'product'
 
 let labelsAll = []
 let labelsPositions = {}
+let relationCurr = []
 
 export function loadLabels() {
   // get labels for a specific document
@@ -220,10 +221,10 @@ export function labelWords(label_name) {
   correctSelection();
 	var wordId;
 	var selCheck = selectionInLabelCheck();
-	var inSelection;
+	// var inSelection;
   // if word isn't already selected
 	if (selCheck == -1) {
-		inSelection = false;
+		// inSelection = false;
     var selectedWord = selectionString();
     var stringArray = selectedWord.split(/\W+/);
     var wordIdSufix = selectionPosition()[0];
@@ -236,14 +237,16 @@ export function labelWords(label_name) {
 		}
 	} else { 
 		// if word is already selected
-		inSelection = true;
+		// inSelection = true;
 		wordId = selCheck;
 	};
 	
     if (wordId) {
         var labelNameIdx = labelsNames.findIndex(el => el === label_name);
         var element = window.document.getElementById(wordId);
+        // if word is/was already labeled
         if (element != null) {
+          // if previous label was deleted
             if (element.classList.contains("deleted") || !labelsAll.includes(wordId)) {
                 clearTables(wordId);
 													// if (inSelection) {
@@ -255,6 +258,7 @@ export function labelWords(label_name) {
                 element.style.cssText = "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + "; color: " + labelsFontsColor[labelNameIdx];
                 submitSelectionLabel(label_name, wordId);
             } else {
+              // delete label
                 labelsAll = labelsAll.filter(item => item != wordId);
                 element.classList.remove(label_name);
                 element.className = "deleted";
@@ -262,6 +266,8 @@ export function labelWords(label_name) {
                 element.style.cssText = 'font-weight: normal; background-color: transparent';
             }
         } else {
+          // if label is new
+
 										// if (inSelection) {
 					// 	alert("A part of the selection is already labeled!");
 					// 	return;
@@ -277,3 +283,51 @@ export function labelWords(label_name) {
         }
     }
 }
+
+
+function clearRelations() {
+  while(relationCurr.length > 0) {
+    let relId = relationCurr.pop();
+    let element = window.document.getElementById(relId);
+    if(element) {
+      element.className = "hide";
+      element.style.cssText = 'font-style: normal; text-decoration: none';
+    }
+  }
+
+}
+
+
+
+export function markRelation(wordsPositions, relationName) {
+  // unhighlight other relations
+  clearRelations();
+  console.log("relCur1", relationCurr);
+
+  let wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
+  for (let relPosIdx = 0; relPosIdx < wordsPositions.length; relPosIdx++) {
+    let relPos = wordsPositions[relPosIdx];
+    let wordId = "relation" + relPos[0];
+    let start = rawPosition(wholeText, relPos[0]);
+    let end = rawPosition(wholeText, relPos[1]);
+
+    let element = window.document.getElementById(wordId);
+    console.log(wordId, element)
+    // relation was highlighted before
+    if (element != null && element.classList.contains("hide")) {
+      relationCurr.push(wordId);
+      console.log("relCur2", relationCurr, start, end);
+      element.className = "show";
+      element.style.cssText = "font-style: italic; text-decoration: underline; ";
+    } else {
+      // relation is new
+        console.log(wholeText.slice(start, end));
+        wholeText = wholeText.slice(0, start) + "<" + wordId + " id=\"" + wordId + "\" class=\" show \" style=\"font-style: italic; text-decoration: underline; \" >"
+                   + wholeText.slice(start, end) + "</" + wordId + ">" + wholeText.slice(end, wholeText.length);
+        document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
+        relationCurr.push(wordId);
+        console.log("relCur3", relationCurr, start, end);
+    }
+    console.log(document.getElementsByClassName("popup-inner")[0].innerHTML);
+  }
+  }

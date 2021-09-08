@@ -10,7 +10,7 @@ function LabelPopUp(props){
 
     ) :
    (<div className="popuplabel">
-        Place mouse over label to check it's details
+        Place mouse over label to check its details
         </div>
    )
 }
