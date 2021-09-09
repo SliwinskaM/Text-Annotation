@@ -31,18 +31,11 @@ export function loadLabels() {
         start = rawPosition(wholeText, start);
         end = rawPosition(wholeText, end);
         
-        // inserting label into text
-        //first version doesn't work
-        // var mouseOver = "onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}"
-        //var mouseOver = "onMouseEnter={setLabel("+label.user+")}"
-        
-        // var mouseOver = "onMouseEnter={localStorage.setItem('userLabel','"+label.user+"');}"
         var mouseOver = "onMouseEnter={window._changeLabel('" + label.user + "');}"
         console.log(mouseOver)
         wholeText = wholeText.slice(0, start) + "<" + label.inner_id + " id=\"" + label.inner_id + "\" class=\"" + label.label_name + "\" style=\"" + "font-weight: bold; background-color: " + labelsColors[labelNameIdx] + 
             "; color: " + labelsFontsColor[labelNameIdx] + ";\" "+ mouseOver+">" + wholeText.slice(start, end) + "</" + label.inner_id + ">" + wholeText.slice(end, wholeText.length);
-        // console.log("onMouseEnter={() => { localStorage.setItem('userLabel','"+label.user+"');localStorage.setItem('label','"+label.label_name+"');}}")
-        // console.log(wholeText)
+
         document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
         labelsAll.push(label.inner_id);
         labelsPositions[label.inner_id] = [start, end];

@@ -5,7 +5,6 @@ function LabelPopUp(props){
     const [userLabel, setLabel] = useState(localStorage.getItem('userLabel'))
 
     function changeLabel(user){
-        console.log("tutaj frajwrze")
         setLabel(user)
     }
     window._changeLabel = changeLabel
