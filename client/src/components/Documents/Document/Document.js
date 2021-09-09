@@ -41,7 +41,7 @@ const Document = ({ document }) => {
     <div>
       <Typography variant="h5" component="p"  color="common.white" >{document.message}</Typography>
     </div>
-
+  
     <div>
       <Button size="small" color="primary" onClick={() => dispatch(deleteDocument(document._id))}><DeleteIcon fontSize="small" /> Delete</Button>
       {/*TODO: Open file in a new tab*/}

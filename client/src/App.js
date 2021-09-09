@@ -14,7 +14,6 @@ import Popup from './components/PopUp/popup';
 import LabelPopUp from './components/LabelPopUp/labelPopUp';
 import './app.css'
 
-
 const App = () => {
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
@@ -67,6 +66,6 @@ const App = () => {
     </Container>
 
   );
-};
+};    
 
 export default App;

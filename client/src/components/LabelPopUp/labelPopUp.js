@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles.css'
 
 function LabelPopUp(props){
-    console.log("hifhlehflhew")
+    const [userLabel, setLabel] = useState(localStorage.getItem('userLabel'))
+
+    function changeLabel(user){
+        console.log("tutaj frajwrze")
+        setLabel(user)
+    }
+    window._changeLabel = changeLabel
+
     return(props.trigger) ? (
         <div class="popuplabel">
-           User:  {localStorage.getItem('userLabel')}
+           Created by:  {userLabel}
         </div>
 
     ) :
