@@ -17,10 +17,16 @@ import './app.css'
 const App = () => {
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
+  var componentRef = React.createRef();
 
   useEffect(() => {
     dispatch(getDocuments());
   }, [currentId, dispatch]);
+
+  
+  function referComponentByRef() {
+    componentRef.current.getData();
+  }
 
   return (
     <Container maxWidth="lg">
@@ -35,10 +41,11 @@ const App = () => {
                 <Form currentId={currentId} setCurrentId={setCurrentId}/>
               </Grid>
               <Grid item sm={4} xs={4}  >
-                    <Relation/>
+                    <Relation refer = {referComponentByRef}/>
               </Grid>
               <Grid item sm={5} xs={5} >
-                    <RelationsTable />
+                    <RelationsTable 
+                      ref={node => componentRef.current = node} />
               </Grid>
             </Grid>
             <Grid item sm={9} item sm={12} container  direction="row" justifyContent="flex-start" alignItems="stretch" spacing={3}>

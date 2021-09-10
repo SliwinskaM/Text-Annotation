@@ -2,8 +2,6 @@ import axios from 'axios';
 
 // import mongoose from 'mongoose';
 
-var wordIdSufix = 0;
-
 
 let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
 let labelsFontsColor = ['black', 'black', 'black', 'black', 'white', 'white', 'black']
@@ -297,7 +295,7 @@ function clearRelations() {
 
 
 
-export function markRelation(wordsPositions, relationName) {
+export function markRelation(wordsPositions) {
   // unhighlight other relations
   clearRelations();
   console.log("relCur1", relationCurr);

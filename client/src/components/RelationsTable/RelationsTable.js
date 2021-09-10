@@ -21,22 +21,25 @@ class RelationsTable extends Component {
 
   handleClick(row) {
     console.log(row);
-    markRelation([row.word1_position, row.word2_position], row.relation_name);
+    markRelation([row.word1_position, row.word2_position]);
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData = () => {
     axios
-      .get("http://localhost:27017/relations/", 
-      { params: {
-        document_Id: localStorage.getItem('currentPostId')
-      }})
-      .then((response) => {
-        this.setState({ relations: response.data });
-        // setRelations(relations => response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .get("http://localhost:27017/relations/", 
+    { params: {
+      document_Id: localStorage.getItem('currentPostId')
+    }})
+    .then((response) => {
+      this.setState({ relations: response.data });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {

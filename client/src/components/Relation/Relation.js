@@ -7,7 +7,7 @@ import RelationsTable from '../RelationsTable/RelationsTable.js'
 
 import { correctSelection, selectionPosition, selectionString } from '../../marking.js'
 
-const Relation = () => {
+const Relation = (props) => {
   let word1 = '';
   let word2 = '';
   let word1Position = [-1, -1];
@@ -54,8 +54,8 @@ const Relation = () => {
         user: localStorage.getItem('user'),
     }
     axios.post('http://localhost:27017/relations', relation).then(console.log('Dodano do bazy: ')).then(console.log(relation));
-    // document.getElementById("relTab").forceUpdate();
-    window.location.reload();
+
+    props.refer();
   }
 
 
