@@ -281,7 +281,7 @@ export function labelWords(label_name) {
 }
 
 
-function clearRelations() {
+export function clearRelations() {
   while(relationCurr.length > 0) {
     let relId = relationCurr.pop();
     let element = window.document.getElementById(relId);
@@ -303,7 +303,7 @@ export function markRelation(wordsPositions) {
   let wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
   for (let relPosIdx = 0; relPosIdx < wordsPositions.length; relPosIdx++) {
     let relPos = wordsPositions[relPosIdx];
-    let wordId = "relation" + relPos[0];
+    let wordId = "relation" + relPos[0] + relPos[1];
     let start = rawPosition(wholeText, relPos[0]);
     let end = rawPosition(wholeText, relPos[1]);
 
