@@ -9,12 +9,17 @@ import { markRelation, clearRelations } from "../../marking.js"
 import { useDispatch } from 'react-redux';
 import { getRelations } from '../../actions/relations';
 
+
 class RelationsTable extends Component {
   state = {
-    relations: []
+    relations: [],
+    selectedRow: -1
   }
 
+
+
   handleClick(row) {
+    this.setState({ selectedRow: row._id });
     markRelation([row.word1_position, row.word2_position]);
   }
 
@@ -39,6 +44,7 @@ class RelationsTable extends Component {
   deleteRelation(relationId) {
     // unmark relation if marked
     clearRelations();
+    this.setState({ selectedRow: -1 });
 
     axios.delete('http://localhost:27017/relations/' + relationId).then(console.log('Usunięto: ')).then(console.log(relationId));
     this.getData();
@@ -60,7 +66,7 @@ class RelationsTable extends Component {
           </TableHead>
           <TableBody>
             {this.state.relations.map((row) => (
-              <TableRow key={row._id}>
+              <TableRow key={row._id} style = {row._id === this.state.selectedRow ? {backgroundColor: "#b3ccff"} : null } >   
                 <TableCell component="th" scope="row" onClick={() => this.handleClick(row)}>{row.relation_name} </TableCell>
                 <TableCell align="right" onClick={() => this.handleClick(row)}>{row.relation_power}</TableCell>
                 <TableCell align="right" onClick={() => this.handleClick(row)}>{row.word1}</TableCell>
