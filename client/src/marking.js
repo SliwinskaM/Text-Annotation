@@ -2,8 +2,6 @@ import axios from 'axios';
 
 // import mongoose from 'mongoose';
 
-var wordIdSufix = 0;
-
 
 let labelsColors = ['red', 'orange', 'yellow', 'yellowgreen', 'green', 'blue', 'lightblue']
 let labelsFontsColor = ['black', 'black', 'black', 'black', 'white', 'white', 'black']
@@ -283,7 +281,7 @@ export function labelWords(label_name) {
 }
 
 
-function clearRelations() {
+export function clearRelations() {
   while(relationCurr.length > 0) {
     let relId = relationCurr.pop();
     let element = window.document.getElementById(relId);
@@ -297,35 +295,29 @@ function clearRelations() {
 
 
 
-export function markRelation(wordsPositions, relationName) {
+export function markRelation(wordsPositions) {
   // unhighlight other relations
   clearRelations();
-  console.log("relCur1", relationCurr);
 
   let wholeText = document.getElementsByClassName("popup-inner")[0].innerHTML;
   for (let relPosIdx = 0; relPosIdx < wordsPositions.length; relPosIdx++) {
     let relPos = wordsPositions[relPosIdx];
-    let wordId = "relation" + relPos[0];
+    let wordId = "relation" + relPos[0] + relPos[1];
     let start = rawPosition(wholeText, relPos[0]);
     let end = rawPosition(wholeText, relPos[1]);
 
     let element = window.document.getElementById(wordId);
-    console.log(wordId, element)
     // relation was highlighted before
     if (element != null && element.classList.contains("hide")) {
       relationCurr.push(wordId);
-      console.log("relCur2", relationCurr, start, end);
       element.className = "show";
       element.style.cssText = "font-style: italic; text-decoration: underline; ";
     } else {
       // relation is new
-        console.log(wholeText.slice(start, end));
         wholeText = wholeText.slice(0, start) + "<" + wordId + " id=\"" + wordId + "\" class=\" show \" style=\"font-style: italic; text-decoration: underline; \" >"
                    + wholeText.slice(start, end) + "</" + wordId + ">" + wholeText.slice(end, wholeText.length);
         document.getElementsByClassName("popup-inner")[0].innerHTML = wholeText;
         relationCurr.push(wordId);
-        console.log("relCur3", relationCurr, start, end);
     }
-    console.log(document.getElementsByClassName("popup-inner")[0].innerHTML);
   }
   }

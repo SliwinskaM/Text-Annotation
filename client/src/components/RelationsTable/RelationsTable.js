@@ -1,43 +1,54 @@
 import React, { Component, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import { Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper, Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 
-import { markRelation } from "../../marking.js"
+import { markRelation, clearRelations } from "../../marking.js"
 
 import { useDispatch } from 'react-redux';
 import { getRelations } from '../../actions/relations';
 
+
 class RelationsTable extends Component {
 
   state = {
-    relations: []
+    relations: [],
+    selectedRow: -1
   }
 
+
+
   handleClick(row) {
-    console.log(row);
-    markRelation([row.word1_position, row.word2_position], row.relation_name);
+    this.setState({ selectedRow: row._id });
+    markRelation([row.word1_position, row.word2_position]);
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData = () => {
     axios
-      .get("http://localhost:27017/relations/", 
-      { params: {
-        document_Id: localStorage.getItem('currentPostId')
-      }})
-      .then((response) => {
-        this.setState({ relations: response.data });
-        //setRelations(relations => response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .get("http://localhost:27017/relations/", 
+    { params: {
+      document_Id: localStorage.getItem('currentPostId')
+    }})
+    .then((response) => {
+      this.setState({ relations: response.data });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  deleteRelation(relationId) {
+    // unmark relation if marked
+    clearRelations();
+    this.setState({ selectedRow: -1 });
+
+    axios.delete('http://localhost:27017/relations/' + relationId).then(console.log('Usunięto: ')).then(console.log(relationId));
+    this.getData();
   }
 
   render() {
@@ -51,18 +62,20 @@ class RelationsTable extends Component {
               <TableCell align="right" style={{color: "white"}}>Word 1</TableCell>
               <TableCell align="right" style={{color: "white"}}>Word 2</TableCell>
               <TableCell align="right" style={{color: "white"}}>Reporter</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.state.relations.map((row) => (
-              <TableRow key={row._id} onClick={() => this.handleClick(row)}>
-                <TableCell component="th" scope="row">
-                  {row.relation_name}
+              <TableRow key={row._id} style = {row._id === this.state.selectedRow ? {backgroundColor: "#b3ccff"} : null } >   
+                <TableCell component="th" scope="row" onClick={() => this.handleClick(row)}>{row.relation_name} </TableCell>
+                <TableCell align="right" onClick={() => this.handleClick(row)}>{row.relation_power}</TableCell>
+                <TableCell align="right" onClick={() => this.handleClick(row)}>{row.word1}</TableCell>
+                <TableCell align="right" onClick={() => this.handleClick(row)}>{row.word2}</TableCell>
+                <TableCell align="right" onClick={() => this.handleClick(row)}>{row.user}</TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => this.deleteRelation(row._id)}><DeleteIcon /></Button>
                 </TableCell>
-                <TableCell align="right">{row.relation_power}</TableCell>
-                <TableCell align="right">{row.word1}</TableCell>
-                <TableCell align="right">{row.word2}</TableCell>
-                <TableCell align="right">{row.user}</TableCell>
               </TableRow>
             ))}
           </TableBody>

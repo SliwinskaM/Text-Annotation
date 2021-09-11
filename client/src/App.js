@@ -7,6 +7,7 @@ import Form from './components/Form/Form';
 import Relation from './components/Relation/Relation';
 import EditableButton from './components/EditableButton/EditableButton';
 import RelationsTable from './components/RelationsTable/RelationsTable'
+import axios from 'axios';
 
 import { getDocuments } from './actions/posts';
 import { labelWords, labelsNames } from './marking';
@@ -17,10 +18,62 @@ import './app.css'
 const App = () => {
   const [currentId, setCurrentId] = useState(0);
   const dispatch = useDispatch();
+  var componentRef = React.createRef();
 
   useEffect(() => {
     dispatch(getDocuments());
   }, [currentId, dispatch]);
+
+  
+  function referComponentByRef() {
+    componentRef.current.getData();
+  }
+
+  function exportLabels(){
+    console.log("Labels")
+      axios
+      .get("http://localhost:27017/labels/", 
+      { params: {
+        document_Id: localStorage.getItem('currentPostId')
+      }})
+      .then((response) => {
+       console.log(response['data'])
+        var blob = new Blob([JSON.stringify(response['data'])], {type: "text/plain"});
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "labels.json";
+        a.click();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      alert("Labels exported!")
+
+      
+  }
+
+  function exportRelations(){
+    console.log("Reltions")
+    axios
+    .get("http://localhost:27017/relations/", 
+    { params: {
+      document_Id: localStorage.getItem('currentPostId')
+    }})
+    .then((response) => {
+     console.log(response['data'])
+     var blob = new Blob([JSON.stringify(response['data'])], {type: "text/plain"});
+     var url = window.URL.createObjectURL(blob);
+     var a = document.createElement("a");
+     a.href = url;
+     a.download = "relations.json";
+     a.click();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    alert("Relations exported!")
+  }
 
   return (
     <Container maxWidth="lg">
@@ -35,10 +88,11 @@ const App = () => {
                 <Form currentId={currentId} setCurrentId={setCurrentId}/>
               </Grid>
               <Grid item sm={4} xs={4}  >
-                    <Relation/>
+                    <Relation refer = {referComponentByRef}/>
               </Grid>
               <Grid item sm={5} xs={5} >
-                    <RelationsTable />
+                    <RelationsTable 
+                      ref={node => componentRef.current = node} />
               </Grid>
             </Grid>
             <Grid item sm={9} item sm={12} container  direction="row" justifyContent="flex-start" alignItems="stretch" spacing={3}>
@@ -55,6 +109,8 @@ const App = () => {
                   <EditableButton xs={2} text={labelsNames[6]} labelId={6} className={labelsNames[6]} style={{ backgroundColor: "lightblue", margin: 10 }} onClick={() => labelWords(labelsNames[6])}/>
                   <LabelPopUp trigger={localStorage.getItem('userLabel')}></LabelPopUp>
                 </Grid>
+                <Button onClick={() => exportLabels()} style={{marginLeft: 20, color: "white"}}>Export labels</Button>
+                <Button onClick={() => exportRelations()} style={{marginLeft: 20, color: "white"}}>Export relations</Button>
                 {/* <Button s={3} style={{ backgroundColor: "white", marginRight: 10}} onClick={() => showRelations()}>See all relations</Button> */}
               <Popup trigger={localStorage.getItem('trigger')}></Popup>
               </Grid>
