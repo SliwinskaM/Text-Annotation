@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './styles.css'
 
 function LabelPopUp(props){
-    const [userLabel, setLabel] = useState(localStorage.getItem('userLabel'))
+    const [userLabel, setLabel] = useState("Place mouse over label to check its details")
 
     function changeLabel(user){
         setLabel(user)
