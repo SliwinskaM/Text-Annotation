@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,6 +15,7 @@ import { useDispatch } from 'react-redux';
 import { getRelations } from '../../actions/relations';
 
 class RelationsTable extends Component {
+
   state = {
     relations: []
   }
@@ -32,7 +33,7 @@ class RelationsTable extends Component {
       }})
       .then((response) => {
         this.setState({ relations: response.data });
-        // setRelations(relations => response);
+        //setRelations(relations => response);
       })
       .catch(function (error) {
         console.log(error);

@@ -55,7 +55,7 @@ const Relation = () => {
     }
     axios.post('http://localhost:27017/relations', relation).then(console.log('Dodano do bazy: ')).then(console.log(relation));
     // document.getElementById("relTab").forceUpdate();
-    window.location.reload();
+     window.location.reload();
   }
 
 
